@@ -15,6 +15,7 @@
     "electron": "^39.2.4"
   },
   "build": {
+    "productName": "Auto PDF Scroller",
     "appId": "com.playmixel.autopdfscroller",
     "mac": { "target": "dmg" },
     "win": { "target": "nsis" }
