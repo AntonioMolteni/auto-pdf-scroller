@@ -1,0 +1,22 @@
+{
+  "name": "auto-pdf-scroller",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "electron-builder": "^26.0.12",
+    "electron": "^39.2.4"
+  },
+  "build": {
+    "appId": "com.playmixel.autopdfscroller",
+    "mac": { "target": "dmg" },
+    "win": { "target": "nsis" }
+  }
+}
