@@ -85,10 +85,10 @@ function setActiveListItem(path) {
   document.querySelectorAll("#fileList li").forEach((li) => {
     if (li.dataset.path === path) {
       li.classList.add("bg-primary", "text-white");
-      li.classList.add("hover:text-black");
+      li.classList.add("hover:text-black", "dark:hover:text-white");
     } else {
       li.classList.remove("bg-primary", "text-white");
-      li.classList.remove("hover:text-black");
+      li.classList.remove("hover:text-black", "dark:hover:text-white");
     }
   });
 }
