@@ -2,6 +2,12 @@
 
 Auto PDF Scroller is a lightweight Electron application that automatically scrolls through PDF documents at a configurable speed. Perfect for hands-free reading, presentations, or studying.
 
+### Download
+
+Grab the latest `.dmg` from the [Releases Page](https://github.com/AntonioMolteni/auto-pdf-scroller/releases) for an easy, ready-to-use installation.
+
+## Features
+
 ## Features
 
 ### Core Functionality
@@ -26,16 +32,25 @@ Auto PDF Scroller is a lightweight Electron application that automatically scrol
 - Optimized touch controls
 - Adjustable PDF scale for better mobile viewing
 
+### Accessibility & Controls Enhancements
+
+- **Unified Start/Stop Button**: Toggle autoscroll with a single button
+- **Keyboard Shortcuts**:
+  - `Space` to start or stop auto-scrolling
+  - `Arrow Keys` to adjust scrolling speed dynamically
+- **Consistent Styling**: Cleaner and more cohesive UI
+- **App Icon Added**: New application icon for better visual identity
+
 ## Controls
 
 | Control           | Action                                                 |
 | ----------------- | ------------------------------------------------------ |
 | **Select Folder** | Choose a folder containing PDF files                   |
 | **☰ (Hamburger)** | Toggle file list on mobile                             |
-| **▶ Start**       | Begin automatic scrolling                              |
-| **⏹ Stop**        | Stop automatic scrolling                               |
+| **▶ / ⏹**         | Start or stop automatic scrolling                      |
 | **Speed Slider**  | Adjust scroll speed (0.5 - 8.0 px/sec)                 |
 | **Manual Scroll** | Any manual interaction pauses autoscroll for 3 seconds |
+| **Keyboard**      | `Space` to start/stop, `Arrow Keys` to adjust speed    |
 
 ## Getting Started
 
