@@ -294,27 +294,47 @@ if (playPauseBtn) {
   console.warn("Play/Pause button not found!");
 }
 
-// Spacebar toggles play/pause when not typing in an input
 document.addEventListener("keydown", (e) => {
-  if (e.code === "Space" || e.key === " ") {
-    const active = document.activeElement;
-    // Allow Space to toggle play/pause except when typing into text fields
-    const isTextarea = active && active.tagName === "TEXTAREA";
-    const isTextInput =
-      active &&
-      active.tagName === "INPUT" &&
-      ["text", "search", "email", "password", "tel", "url", "number"].includes(
-        (active.type || "").toLowerCase()
-      );
-    const isEditable = active && active.isContentEditable;
+  const active = document.activeElement;
+  const isTextarea = active && active.tagName === "TEXTAREA";
+  const isTextInput =
+    active &&
+    active.tagName === "INPUT" &&
+    ["text", "search", "email", "password", "tel", "url", "number"].includes(
+      (active.type || "").toLowerCase()
+    );
+  const isEditable = active && active.isContentEditable;
 
-    if (isTextarea || isTextInput || isEditable) return;
+  if (isTextarea || isTextInput || isEditable) return;
 
-    // If focus is on a range slider or button, still handle Space as play/pause
-    e.preventDefault();
-    togglePlayPause();
+  switch (e.key) {
+    case " ":
+    case "Spacebar":
+      e.preventDefault();
+      togglePlayPause();
+      break;
+
+    case "ArrowLeft":
+      e.preventDefault();
+      adjustSpeed(-0.1); // decrease speed
+      break;
+
+    case "ArrowRight":
+      e.preventDefault();
+      adjustSpeed(0.1); // increase speed
+      break;
   }
 });
+
+function adjustSpeed(delta) {
+  let newVal = parseFloat(speedSlider.value) + delta;
+  newVal = Math.min(
+    Math.max(newVal, parseFloat(speedSlider.min)),
+    parseFloat(speedSlider.max)
+  );
+  speedSlider.value = newVal.toFixed(1);
+  speedValue.textContent = newVal.toFixed(1);
+}
 
 // Resume button handler
 // (Resume button removed) — rely on auto-resume only
