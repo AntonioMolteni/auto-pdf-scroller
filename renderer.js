@@ -284,13 +284,19 @@ if (playPauseBtn) {
 document.addEventListener("keydown", (e) => {
   if (e.code === "Space" || e.key === " ") {
     const active = document.activeElement;
-    if (
+    // Allow Space to toggle play/pause except when typing into text fields
+    const isTextarea = active && active.tagName === "TEXTAREA";
+    const isTextInput =
       active &&
-      (active.tagName === "INPUT" ||
-        active.tagName === "TEXTAREA" ||
-        active.isContentEditable)
-    )
-      return;
+      active.tagName === "INPUT" &&
+      ["text", "search", "email", "password", "tel", "url", "number"].includes(
+        (active.type || "").toLowerCase()
+      );
+    const isEditable = active && active.isContentEditable;
+
+    if (isTextarea || isTextInput || isEditable) return;
+
+    // If focus is on a range slider or button, still handle Space as play/pause
     e.preventDefault();
     togglePlayPause();
   }
