@@ -6,6 +6,23 @@ Auto PDF Scroller is a lightweight Electron application that automatically scrol
 
 Grab the latest `.dmg` from the [Releases Page](https://github.com/AntonioMolteni/auto-pdf-scroller/releases) for an easy, ready-to-use installation.
 
+**Note:** You may see the error:  
+_"Auto PDF Scroller is damaged and can’t be opened. You should move it to the Trash."_
+
+This happens because the app is not currently signed by Apple. To run it, follow these steps after downloading:
+
+1. Open Terminal.
+2. Run the command:
+
+   ```bash
+    xattr -c "/Applications/Auto PDF Scroller.app"
+
+   ```
+
+3. Try opening the app again.
+
+This should allow the app to launch without any errors.
+
 ## Features
 
 ### Core Functionality
