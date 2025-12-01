@@ -1,35 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Auto PDF Scroller</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="style.css">
+
+	<!-- Tailwind -->
+	<script src="https://cdn.tailwindcss.com"></script>
+
+	<!-- Centralized Tailwind color config with dark mode -->
+	<script>
+		tailwind.config = {
+			darkMode: 'media',
+			theme: {
+				extend: {
+					colors: {
+						primary: "#3b82f6",
+						primaryHover: "#2563eb",
+						surface: "#f0f0f0",
+						surfaceDark: "#000000",
+						sidebar: "#ffffff",
+						sidebarDark: "#303030",
+						sidebarHover: "#f3f4f6",
+						sidebarHoverDark: "#3a3a3a",
+						control: "#e5e7eb",
+						controlDark: "#303030",
+						muted: "#303030",
+						mutedDark: "#d1d5db"
+					}
+				}
+			}
+		};
+	</script>
+
+	<!-- Icons -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 
-<body>
-	<div class="sidebar collapsed">
-		<button id="pickFolder" class="btn primary" aria-label="Select folder" tabindex="1">Select Folder</button>
-		<ul id="fileList"></ul>
+<body class="flex h-screen overflow-x-hidden font-sans bg-surface dark:bg-surfaceDark dark:text-mutedDark">
+
+	<!-- Sidebar -->
+	<div id="sidebar"
+		class="sidebar collapsed w-64 bg-sidebar dark:bg-sidebarDark flex flex-col p-2 box-border md:flex-col md:w-64">
+
+		<button id="pickFolder"
+			tabindex="1"
+			class="w-full mb-4 px-4 py-2 text-base rounded-md bg-primary text-white hover:bg-primaryHover transition-transform active:translate-y-0.5">
+			Select Folder
+		</button>
+
+		<ul id="fileList"
+			class="flex-1 overflow-y-auto list-none mt-0 pt-0 border-t border-sidebarHover dark:border-sidebarHoverDark smooth-scroll md:block md:max-h-full">
 	</div>
 
-	<div class="viewer-panel">
-		<div class="controls">
-			<button id="toggleSidebar" class="btn" aria-label="Toggle file list" aria-expanded="true">☰</button>
-			<button id="playPause" class="btn primary" aria-pressed="false" aria-label="Play" tabindex="2">▶ Play</button>
-			<input id="speed" type="range" min="0.5" max="8" value="2" step="0.1" aria-label="Scroll speed" tabindex="3">
-			<span id="speedValue">2.0</span>
-			<span id="status" class="status">Paused</span>
+	<!-- Viewer panel -->
+	<div class="viewer-panel flex-1 flex flex-col overflow-x-hidden">
+		<!-- Controls -->
+		<div class="controls flex items-center gap-2 p-2 bg-control dark:bg-controlDark flex-wrap md:flex-nowrap">
+
+			<button id="playPause"
+				tabindex="2"
+				class="flex items-center justify-center min-w-[96px] px-3 py-2 rounded bg-primary text-white hover:bg-primaryHover transition gap-1"
+				aria-pressed="false">
+				<i class="fa fa-play"></i>
+				<span>Play</span>
+			</button>
+
+			<input 
+				tabindex="3"
+				id="speed" type="range" min="0.5" max="8" value="2" step="0.1" class="h-2 w-32 accent-primary"
+				aria-label="Scroll speed">
+
+			<span id="speedValue" class="ml-2 text-muted dark:text-mutedDark">2.0</span>
+
+			<span id="status" class="status ml-4 text-muted dark:text-mutedDark">Paused</span>
 		</div>
 
-		<div id="viewerContainer">
-			<canvas id="pdf-canvas"></canvas>
+		<!-- PDF viewer -->
+		<div id="viewerContainer"
+			class="flex-1 overflow-y-auto bg-surface dark:bg-surfaceDark flex flex-col items-center p-2">
+			<canvas id="pdf-canvas" class="block max-w-full h-auto bg-surface dark:bg-surfaceDark my-2"></canvas>
 		</div>
+
 	</div>
 
+	<!-- PDF.js -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
 
+	<!-- App -->
 	<script src="renderer.js"></script>
 </body>
 

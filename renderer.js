@@ -38,24 +38,6 @@ document.getElementById("pickFolder").onclick = async () => {
   if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
 };
 
-// Sidebar toggle (hamburger) for small screens
-const toggleSidebarBtn = document.getElementById("toggleSidebar");
-if (toggleSidebarBtn) {
-  toggleSidebarBtn.onclick = () => {
-    const sidebar = document.querySelector(".sidebar");
-    if (!sidebar) {
-      console.error("Sidebar not found!");
-      return;
-    }
-    const collapsed = sidebar.classList.toggle("collapsed");
-    console.log("Hamburger clicked. Sidebar collapsed:", collapsed);
-    // update aria-expanded for accessibility (true when file list visible)
-    toggleSidebarBtn.setAttribute("aria-expanded", String(!collapsed));
-  };
-} else {
-  console.warn("Toggle sidebar button not found!");
-}
-
 // Populate sidebar
 function populateFileList(files) {
   const list = document.getElementById("fileList");
@@ -66,6 +48,8 @@ function populateFileList(files) {
     li.textContent = file.split("/").pop();
     li.dataset.path = file;
     li.tabIndex = 0;
+    li.className =
+      "cursor-pointer px-2 py-1 my-1 rounded-lg hover:bg-sidebarHover dark:hover:bg-sidebarHoverDark transition";
     li.onclick = () => {
       openPDF(file);
       setActiveListItem(file);
@@ -95,9 +79,17 @@ function populateFileList(files) {
   });
 }
 
+// Update active list item to use Tailwind
+
 function setActiveListItem(path) {
   document.querySelectorAll("#fileList li").forEach((li) => {
-    li.classList.toggle("active", li.dataset.path === path);
+    if (li.dataset.path === path) {
+      li.classList.add("bg-primary", "text-white");
+      li.classList.add("hover:text-black");
+    } else {
+      li.classList.remove("bg-primary", "text-white");
+      li.classList.remove("hover:text-black");
+    }
   });
 }
 
@@ -234,11 +226,11 @@ function updatePlayButton(isPlaying) {
   playPauseBtn.setAttribute("aria-pressed", String(Boolean(isPlaying)));
   if (isPlaying) {
     playPauseBtn.classList.add("primary");
-    playPauseBtn.textContent = "⏸ Pause";
+    playPauseBtn.innerHTML = `<i class="fa fa-pause"></i> Pause`;
     playPauseBtn.setAttribute("aria-label", "Pause");
   } else {
     playPauseBtn.classList.remove("primary");
-    playPauseBtn.textContent = "▶ Play";
+    playPauseBtn.innerHTML = `<i class="fa fa-play"></i> Play`;
     playPauseBtn.setAttribute("aria-label", "Play");
   }
 }
