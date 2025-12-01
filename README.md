@@ -1,6 +1,12 @@
 # Auto PDF Scroller
 
+![App Icon](assets/autopdfscroller.png)
+
 Auto PDF Scroller is a lightweight Electron application that automatically scrolls through PDF documents at a configurable speed. Perfect for hands-free reading, presentations, or studying.
+
+### Demo
+
+[![Demo Video](assets/demo.gif)](assets/demo.mov)
 
 ### Download
 
