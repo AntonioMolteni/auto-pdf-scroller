@@ -18,11 +18,11 @@
 					colors: {
 						primary: "#3b82f6",
 						primaryHover: "#2563eb",
-						surface: "#ffffff",
+						surface: "#f0f0f0",
 						surfaceDark: "#000000",
-						sidebar: "#f3f4f6",
+						sidebar: "#ffffff",
 						sidebarDark: "#303030",
-						sidebarHover: "#e5e7eb",
+						sidebarHover: "#f3f4f6",
 						sidebarHoverDark: "#3a3a3a",
 						control: "#e5e7eb",
 						controlDark: "#303030",
@@ -45,6 +45,7 @@
 		class="sidebar collapsed w-64 bg-sidebar dark:bg-sidebarDark flex flex-col p-2 box-border md:flex-col md:w-64">
 
 		<button id="pickFolder"
+			tabindex="1"
 			class="w-full mb-4 px-4 py-2 text-base rounded-md bg-primary text-white hover:bg-primaryHover transition-transform active:translate-y-0.5">
 			Select Folder
 		</button>
@@ -59,13 +60,16 @@
 		<div class="controls flex items-center gap-2 p-2 bg-control dark:bg-controlDark flex-wrap md:flex-nowrap">
 
 			<button id="playPause"
+				tabindex="2"
 				class="flex items-center justify-center min-w-[96px] px-3 py-2 rounded bg-primary text-white hover:bg-primaryHover transition gap-1"
 				aria-pressed="false">
 				<i class="fa fa-play"></i>
 				<span>Play</span>
 			</button>
 
-			<input id="speed" type="range" min="0.5" max="8" value="2" step="0.1" class="h-2 w-32 accent-primary"
+			<input 
+				tabindex="3"
+				id="speed" type="range" min="0.5" max="8" value="2" step="0.1" class="h-2 w-32 accent-primary"
 				aria-label="Scroll speed">
 
 			<span id="speedValue" class="ml-2 text-muted dark:text-mutedDark">2.0</span>
