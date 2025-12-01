@@ -65,7 +65,7 @@ function populateFileList(files) {
     const li = document.createElement("li");
     li.textContent = file.split("/").pop();
     li.dataset.path = file;
-    li.tabIndex = 99;
+    li.tabIndex = 0;
     li.onclick = () => {
       openPDF(file);
       setActiveListItem(file);
