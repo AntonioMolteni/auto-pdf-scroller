@@ -196,6 +196,13 @@ function smoothScrollLoop(timestamp) {
 
   if (isAtEnd) {
     scrolling = false;
+    // Clear any manual-pause state and cancel auto-resume so we don't
+    // accidentally restart after finishing naturally.
+    pausedByUser = false;
+    if (inactivityTimer) {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = null;
+    }
     updateStatus("Finished");
     // Ensure the UI reflects that scrolling stopped by switching the
     // play/pause control back to the Play state.
@@ -223,16 +230,18 @@ function updatePlayButton(isPlaying) {
 }
 
 function startScrolling() {
-  // Simple test: try to scroll down 1 pixel and see if it works
-  const initialScrollTop = viewer.scrollTop;
-  viewer.scrollTop = initialScrollTop + 1;
-  const canScroll = viewer.scrollTop > initialScrollTop;
-  viewer.scrollTop = initialScrollTop; // Reset
-
-  if (!canScroll) {
+  // Determine whether the viewer can scroll at all
+  const maxScroll = viewer.scrollHeight - viewer.clientHeight;
+  if (maxScroll <= 0) {
     updateStatus("PDF is not scrollable");
     console.warn("Cannot start autoscroll: viewer cannot scroll");
     return;
+  }
+
+  // If the viewer is already at the end, rewind to the top when user presses Play
+  const atEnd = viewer.scrollTop >= maxScroll - 1;
+  if (atEnd) {
+    viewer.scrollTop = 0;
   }
 
   if (!scrolling) {
