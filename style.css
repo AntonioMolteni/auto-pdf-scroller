@@ -107,7 +107,7 @@ body {
 }
 
 #fileList li.active {
-	background: #4a90e2;
+	background: var(--btn-primary-bg);
 	color: white;
 }
 
@@ -126,6 +126,14 @@ body {
 	display: flex;
 	align-items: center;
 	gap: 10px;
+}
+
+/* Ensure the combined Play/Pause button keeps a stable width regardless of its label */
+#playPause {
+    min-width: 96px;
+    text-align: center;
+    box-sizing: border-box;
+    white-space: nowrap;
 }
 
 /* PDF viewer container */

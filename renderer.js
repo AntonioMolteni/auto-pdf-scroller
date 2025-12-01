@@ -197,16 +197,32 @@ function smoothScrollLoop(timestamp) {
   if (isAtEnd) {
     scrolling = false;
     updateStatus("Finished");
+    // Ensure the UI reflects that scrolling stopped by switching the
+    // play/pause control back to the Play state.
+    updatePlayButton(false);
     return;
   }
 
   requestAnimationFrame(smoothScrollLoop);
 }
 
-// Start / Stop buttons
-document.getElementById("start").onclick = () => {
-  console.log("Start button clicked, scrolling:", scrolling);
+// Play/Pause button (combined Start/Stop)
+const playPauseBtn = document.getElementById("playPause");
+function updatePlayButton(isPlaying) {
+  if (!playPauseBtn) return;
+  playPauseBtn.setAttribute("aria-pressed", String(Boolean(isPlaying)));
+  if (isPlaying) {
+    playPauseBtn.classList.add("primary");
+    playPauseBtn.textContent = "⏸ Pause";
+    playPauseBtn.setAttribute("aria-label", "Pause");
+  } else {
+    playPauseBtn.classList.remove("primary");
+    playPauseBtn.textContent = "▶ Play";
+    playPauseBtn.setAttribute("aria-label", "Play");
+  }
+}
 
+function startScrolling() {
   // Simple test: try to scroll down 1 pixel and see if it works
   const initialScrollTop = viewer.scrollTop;
   viewer.scrollTop = initialScrollTop + 1;
@@ -226,16 +242,50 @@ document.getElementById("start").onclick = () => {
     scrollAccumulator = 0; // Reset accumulator to avoid rounding errors
     scrollDebugLogged = false; // Reset debug flag
     updateStatus("Playing");
+    updatePlayButton(true);
     console.log("Starting autoscroll...");
     requestAnimationFrame(smoothScrollLoop);
   }
-};
+}
 
-document.getElementById("stop").onclick = () => {
+function stopScrolling() {
   scrolling = false;
   pausedByUser = false;
-  updateStatus("Stopped");
-};
+  updateStatus("Paused");
+  updatePlayButton(false);
+}
+
+function togglePlayPause() {
+  if (scrolling) stopScrolling();
+  else startScrolling();
+}
+
+if (playPauseBtn) {
+  playPauseBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    togglePlayPause();
+  });
+  // Initialize button state
+  updatePlayButton(false);
+} else {
+  console.warn("Play/Pause button not found!");
+}
+
+// Spacebar toggles play/pause when not typing in an input
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space" || e.key === " ") {
+    const active = document.activeElement;
+    if (
+      active &&
+      (active.tagName === "INPUT" ||
+        active.tagName === "TEXTAREA" ||
+        active.isContentEditable)
+    )
+      return;
+    e.preventDefault();
+    togglePlayPause();
+  }
+});
 
 // Resume button handler
 // (Resume button removed) — rely on auto-resume only
