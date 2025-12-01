@@ -67,7 +67,7 @@ function populateFileList(files) {
     li.dataset.path = file;
     li.tabIndex = 0;
     li.className =
-      "cursor-pointer px-2 py-1 my-1 rounded-lg hover:bg-gray-200 transition";
+      "cursor-pointer px-2 py-1 my-1 rounded-lg hover:bg-sidebarHover dark:hover:bg-sidebarHoverDark transition";
     li.onclick = () => {
       openPDF(file);
       setActiveListItem(file);
