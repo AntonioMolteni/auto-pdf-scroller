@@ -141,7 +141,3 @@ This project is licensed under the ISC License - see the LICENSE file for detail
 ## Author
 
 **Antonio Molteni**
-
----
-
-**Current Version**: 1.0.0
