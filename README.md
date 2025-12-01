@@ -8,8 +8,6 @@ Grab the latest `.dmg` from the [Releases Page](https://github.com/AntonioMolten
 
 ## Features
 
-## Features
-
 ### Core Functionality
 
 - **Automatic PDF Scrolling**: Smooth, time-based autoscroll at adjustable speeds (0.5x - 8x)
