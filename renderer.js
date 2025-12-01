@@ -66,6 +66,8 @@ function populateFileList(files) {
     li.textContent = file.split("/").pop();
     li.dataset.path = file;
     li.tabIndex = 0;
+    li.className =
+      "cursor-pointer px-2 py-1 my-1 rounded-lg hover:bg-gray-200 transition";
     li.onclick = () => {
       openPDF(file);
       setActiveListItem(file);
@@ -95,9 +97,16 @@ function populateFileList(files) {
   });
 }
 
+// Update active list item to use Tailwind
 function setActiveListItem(path) {
   document.querySelectorAll("#fileList li").forEach((li) => {
-    li.classList.toggle("active", li.dataset.path === path);
+    if (li.dataset.path === path) {
+      li.classList.add("bg-blue-500", "text-white");
+      li.classList.remove("hover:bg-gray-200");
+    } else {
+      li.classList.remove("bg-blue-500", "text-white");
+      li.classList.add("hover:bg-gray-200");
+    }
   });
 }
 
@@ -234,11 +243,11 @@ function updatePlayButton(isPlaying) {
   playPauseBtn.setAttribute("aria-pressed", String(Boolean(isPlaying)));
   if (isPlaying) {
     playPauseBtn.classList.add("primary");
-    playPauseBtn.textContent = "⏸ Pause";
+    playPauseBtn.innerHTML = `<i class="fa fa-pause"></i> Pause`;
     playPauseBtn.setAttribute("aria-label", "Pause");
   } else {
     playPauseBtn.classList.remove("primary");
-    playPauseBtn.textContent = "▶ Play";
+    playPauseBtn.innerHTML = `<i class="fa fa-play"></i> Play`;
     playPauseBtn.setAttribute("aria-label", "Play");
   }
 }
