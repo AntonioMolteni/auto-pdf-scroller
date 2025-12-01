@@ -38,24 +38,6 @@ document.getElementById("pickFolder").onclick = async () => {
   if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
 };
 
-// Sidebar toggle (hamburger) for small screens
-const toggleSidebarBtn = document.getElementById("toggleSidebar");
-if (toggleSidebarBtn) {
-  toggleSidebarBtn.onclick = () => {
-    const sidebar = document.querySelector(".sidebar");
-    if (!sidebar) {
-      console.error("Sidebar not found!");
-      return;
-    }
-    const collapsed = sidebar.classList.toggle("collapsed");
-    console.log("Hamburger clicked. Sidebar collapsed:", collapsed);
-    // update aria-expanded for accessibility (true when file list visible)
-    toggleSidebarBtn.setAttribute("aria-expanded", String(!collapsed));
-  };
-} else {
-  console.warn("Toggle sidebar button not found!");
-}
-
 // Populate sidebar
 function populateFileList(files) {
   const list = document.getElementById("fileList");
