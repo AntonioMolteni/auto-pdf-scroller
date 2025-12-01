@@ -65,6 +65,7 @@ function populateFileList(files) {
     const li = document.createElement("li");
     li.textContent = file.split("/").pop();
     li.dataset.path = file;
+    li.tabIndex = 99;
     li.onclick = () => {
       openPDF(file);
       setActiveListItem(file);
@@ -72,13 +73,26 @@ function populateFileList(files) {
     list.appendChild(li);
   });
 
-  // Debug: verify file list is populated
-  console.log(
-    `File list populated with ${files.length} items. List element:`,
-    list
-  );
-  console.log(`List display style: ${window.getComputedStyle(list).display}`);
-  console.log(`List visibility: ${window.getComputedStyle(list).visibility}`);
+  fileList.addEventListener("keydown", (e) => {
+    const active = document.activeElement;
+    if (!active || active.tagName !== "LI") return;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        if (active.nextElementSibling) active.nextElementSibling.focus();
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        if (active.previousElementSibling)
+          active.previousElementSibling.focus();
+        break;
+      case "Enter":
+        e.preventDefault();
+        active.click();
+        break;
+    }
+  });
 }
 
 function setActiveListItem(path) {
