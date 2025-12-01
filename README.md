@@ -8,8 +8,6 @@ Grab the latest `.dmg` from the [Releases Page](https://github.com/AntonioMolten
 
 ## Features
 
-## Features
-
 ### Core Functionality
 
 - **Automatic PDF Scrolling**: Smooth, time-based autoscroll at adjustable speeds (0.5x - 8x)
@@ -17,20 +15,6 @@ Grab the latest `.dmg` from the [Releases Page](https://github.com/AntonioMolten
 - **Persistent Settings**: Automatically remembers your last opened folder
 - **Manual Scroll Detection**: Automatically pauses autoscroll when you manually interact with the document, then resumes after 3 seconds
 - **Smooth Performance**: Fractional pixel accumulation ensures smooth scrolling at all speeds
-
-### Desktop Features
-
-- Two-column layout with file list sidebar
-- Native-looking UI with system button styling
-- Responsive controls bar
-
-### Mobile Features
-
-- Fully responsive design for phones and tablets
-- Portrait and landscape orientation support
-- Hamburger menu for file list navigation
-- Optimized touch controls
-- Adjustable PDF scale for better mobile viewing
 
 ### Accessibility & Controls Enhancements
 
@@ -46,7 +30,6 @@ Grab the latest `.dmg` from the [Releases Page](https://github.com/AntonioMolten
 | Control           | Action                                                 |
 | ----------------- | ------------------------------------------------------ |
 | **Select Folder** | Choose a folder containing PDF files                   |
-| **☰ (Hamburger)** | Toggle file list on mobile                             |
 | **▶ / ⏹**         | Start or stop automatic scrolling                      |
 | **Speed Slider**  | Adjust scroll speed (0.5 - 8.0 px/sec)                 |
 | **Manual Scroll** | Any manual interaction pauses autoscroll for 3 seconds |
@@ -88,7 +71,7 @@ npx electron-builder
 
 - **Framework**: Electron 39.2.4
 - **PDF Engine**: PDF.js 3.11.174
-- **Language**: Vanilla JavaScript, HTML5, CSS3
+- **Language**: Vanilla JavaScript, HTML5, Tailwind Styling
 
 ### Architecture
 
@@ -98,13 +81,6 @@ npx electron-builder
 - **Flexbox Responsive Layout**: Adapts seamlessly to desktop and mobile screens
 - **Manual Scroll Detection**: Event listeners for wheel, touch, pointer, and keyboard interactions
 
-### Performance Optimizations
-
-- Efficient PDF rendering with configurable scale
-- Immediate programmatic scrolling (no CSS smooth scroll interference)
-- Minimal DOM manipulation
-- Event delegation for file list interactions
-
 ## Project Structure
 
 ```
@@ -112,8 +88,7 @@ auto-pdf-scroller/
 ├── main.js              # Electron main process
 ├── preload.js           # IPC bridge for security
 ├── renderer.js          # Application logic and PDF handling
-├── index.html           # UI structure
-├── style.css            # Responsive styling
+├── index.html           # UI structure + Tailwind Styling
 ├── package.json         # Dependencies and scripts
 └── README.md            # This file
 ```
@@ -121,29 +96,13 @@ auto-pdf-scroller/
 ## Known Limitations
 
 - Requires PDF files to be in a local directory
-- PDF.js worker thread must be available
-- Mobile autoscroll requires sufficient vertical space after controls and file list
+- Not Available on Mobile or Web
 
 ## Future Enhancements
 
-- Keyboard shortcuts for speed adjustment
-- Custom speed profiles
-- PDF annotation support
-- Cloud storage integration
-- Bookmarks and page navigation
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the ISC License - see the LICENSE file for details.
+- Dark Mode For PDFs
+- PDF Search
 
 ## Author
 
 **Antonio Molteni**
-
----
-
-**Current Version**: 1.0.0
