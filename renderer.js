@@ -99,13 +99,23 @@ function populateFileList(files) {
 // Update active list item to use Tailwind
 
 function setActiveListItem(path) {
+  const key = typeof path === "string" ? path : path.name;
+
   document.querySelectorAll("#fileList li").forEach((li) => {
-    if (li.dataset.path === path) {
-      li.classList.add("bg-primary", "text-white");
-      li.classList.add("hover:text-black", "dark:hover:text-white");
+    if (li.dataset.path === key) {
+      li.classList.add(
+        "bg-primary",
+        "text-white",
+        "hover:text-black",
+        "dark:hover:text-white"
+      );
     } else {
-      li.classList.remove("bg-primary", "text-white");
-      li.classList.remove("hover:text-black", "dark:hover:text-white");
+      li.classList.remove(
+        "bg-primary",
+        "text-white",
+        "hover:text-black",
+        "dark:hover:text-white"
+      );
     }
   });
 }
