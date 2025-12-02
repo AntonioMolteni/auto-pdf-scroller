@@ -45,7 +45,7 @@
      class="bg-sidebar dark:bg-sidebarDark flex flex-col p-2 md:w-64 md:flex-shrink-0 w-full md:h-full">
 
   <!-- Row with Hamburger and Select Folder button -->
-  <div class="flex items-center gap-2 mb-4 md:flex-col md:gap-0">
+  <div class="flex items-center gap-2 md:flex-col md:gap-0 pt-1">
 
     <!-- Hamburger toggle for small screens -->
     <button id="toggleFileList"
@@ -64,30 +64,38 @@
   <input id="fileInput" type="file" accept=".pdf" multiple class="hidden">
 
   <ul id="fileList"
-      class="flex-1 overflow-y-auto list-none mt-0 pt-0 border-t border-sidebarHover dark:border-sidebarHoverDark smooth-scroll hidden md:block">
+      class="flex-1 overflow-y-auto list-none mt-2 pt-0 border-t border-sidebarHover dark:border-sidebarHoverDark smooth-scroll hidden md:block">
   </ul>
 </div>
 
   <!-- Viewer panel -->
   <div class="viewer-panel flex-1 flex flex-col overflow-x-hidden">
 
-    <!-- Controls -->
-    <div class="controls flex items-center gap-2 p-2 bg-control dark:bg-controlDark flex-wrap">
+	<!-- Controls -->
+	<div class="controls flex flex-row md:flex-row items-center py-3 gap-2 px-2 bg-control dark:bg-controlDark flex-wrap">
+	
+		<!-- Play/Pause button -->
+		<button id="playPause" tabindex="2"
+			class="flex items-center justify-center min-w-[96px] px-3 py-2 rounded bg-primary text-white hover:bg-primaryHover transition gap-1"
+			aria-pressed="false">
+			<i class="fa fa-play"></i>
+			<span>Play</span>
+		</button>
+	
+		<!-- Slider + Value + Status -->
+		<div class="flex-1 flex flex-col gap-1 justify-center">
+			<div class="flex items-center gap-2 w-full">
+				<input tabindex="3" id="speed" type="range" min="0.5" max="8" value="2" step="0.1"
+					class="h-2 w-full md:w-32 accent-primary" aria-label="Scroll speed">
+				<span id="speedValue" class="text-muted dark:text-mutedDark text-sm leading-none">2.0</span>
+			</div>
+	
+			<!-- Status below slider -->
+			<span id="status" class="text-muted dark:text-mutedDark text-sm leading-none">Paused</span>
+		</div>
+	
+	</div>
 
-      <button id="playPause"
-              tabindex="2"
-              class="flex items-center justify-center min-w-[96px] px-3 py-2 rounded bg-primary text-white hover:bg-primaryHover transition gap-1"
-              aria-pressed="false">
-        <i class="fa fa-play"></i>
-        <span>Play</span>
-      </button>
-
-      <input tabindex="3" id="speed" type="range" min="0.5" max="8" value="2" step="0.1"
-             class="h-2 w-full md:w-32 accent-primary" aria-label="Scroll speed">
-
-      <span id="speedValue" class="ml-2 text-muted dark:text-mutedDark">2.0</span>
-      <span id="status" class="status ml-4 text-muted dark:text-mutedDark">Paused</span>
-    </div>
 
     <!-- PDF viewer -->
     <div id="viewerContainer"
