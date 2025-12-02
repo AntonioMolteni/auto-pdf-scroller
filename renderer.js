@@ -37,6 +37,7 @@ pickButton.onclick = async () => {
     pdfFiles = selected;
     populateFileList(pdfFiles);
     if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
+    setActiveListItem(pdfFiles[0]);
     return;
   }
 
@@ -51,6 +52,7 @@ pickButton.onclick = async () => {
     populateFileList(pdfFiles);
 
     if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
+    setActiveListItem(pdfFiles[0]);
   };
 };
 
