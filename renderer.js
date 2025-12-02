@@ -7,6 +7,7 @@ const viewer = document.getElementById("viewerContainer");
 const speedSlider = document.getElementById("speed");
 const speedValue = document.getElementById("speedValue");
 const statusLabel = document.getElementById("status");
+const pickButton = document.getElementById("pickFolder");
 
 // Base speed factor (pixels per second at slider=1)
 // On mobile: scale up to 40 to make autoscroll more visible on small screens
@@ -25,17 +26,32 @@ speedSlider.oninput = () => {
 };
 
 // Folder picker
-document.getElementById("pickFolder").onclick = async () => {
-  const selected = await window.api.selectFolder();
-  // If the user cancelled the dialog, the main process returns null — keep existing selection
-  if (selected === null) return;
+pickButton.textContent = isElectron() ? "Select Folder" : "Select Files";
 
-  // Otherwise update the file list (may be empty if folder has no PDFs)
-  if (!Array.isArray(selected)) return;
-  pdfFiles = selected;
-  populateFileList(pdfFiles);
+pickButton.onclick = async () => {
+  // Set appropriate label
+  pickButton.textContent = isElectron() ? "Select Folder" : "Select Files";
+  if (isElectron()) {
+    const selected = await window.api.selectFolder();
+    if (selected === null) return;
+    pdfFiles = selected;
+    populateFileList(pdfFiles);
+    if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
+    return;
+  }
 
-  if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
+  // --- Web / Safari fallback ---
+  const input = document.getElementById("fileInput");
+  input.value = null; // reset previous selection
+  input.click();
+
+  input.onchange = () => {
+    if (!input.files) return;
+    pdfFiles = Array.from(input.files);
+    populateFileList(pdfFiles);
+
+    if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
+  };
 };
 
 // Populate sidebar
@@ -45,8 +61,9 @@ function populateFileList(files) {
 
   files.forEach((file) => {
     const li = document.createElement("li");
-    li.textContent = file.split("/").pop();
-    li.dataset.path = file;
+    li.textContent =
+      typeof file === "string" ? file.split("/").pop() : file.name;
+    li.dataset.path = typeof file === "string" ? file : file.name;
     li.tabIndex = 0;
     li.className =
       "cursor-pointer px-2 py-1 my-1 rounded-lg hover:bg-sidebarHover dark:hover:bg-sidebarHoverDark transition";
@@ -94,8 +111,20 @@ function setActiveListItem(path) {
 }
 
 // Open PDF (all pages)
-async function openPDF(path) {
-  pdfDoc = await pdfjsLib.getDocument(path).promise;
+async function openPDF(file) {
+  let loadingTask;
+
+  if (typeof file === "string") {
+    // Electron uses filesystem paths
+    loadingTask = pdfjsLib.getDocument(file);
+  } else {
+    // Web uses File objects
+    const arrayBuffer = await file.arrayBuffer();
+    loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+  }
+
+  pdfDoc = await loadingTask.promise;
+
   viewer.innerHTML = "";
 
   // update UI state
@@ -373,3 +402,7 @@ window.api.loadLastFolder().then((files) => {
 
   if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
 });
+
+function isElectron() {
+  return !!window.api; // window.api exists only in Electron via preload.js
+}
