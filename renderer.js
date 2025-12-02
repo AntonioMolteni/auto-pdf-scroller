@@ -397,6 +397,18 @@ function onUserInteraction() {
   }, autoResumeMs);
 }
 
+const toggleButton = document.getElementById("toggleFileList");
+const fileList = document.getElementById("fileList");
+
+toggleButton.addEventListener("click", () => {
+  const isHidden = fileList.classList.toggle("hidden");
+
+  // Optional: toggle hamburger icon to "X" when open
+  toggleButton.innerHTML = isHidden
+    ? '<i class="fa fa-bars"></i>'
+    : '<i class="fa fa-times"></i>';
+});
+
 // Listen for typical manual-scroll interactions on the viewer
 viewer.addEventListener("wheel", onUserInteraction, { passive: true });
 viewer.addEventListener("touchstart", onUserInteraction, { passive: true });
