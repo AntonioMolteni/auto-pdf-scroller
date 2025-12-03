@@ -6,7 +6,8 @@
     "electron": "electron .",
     "build:electron": "electron-builder",
     "web": "vite --host",
-    "build:web": "vite build --outDir=dist-web"
+    "build:web": "vite build && npm run zip:web",
+    "zip:web": "cd dist-web && zip -r auto-pdf-scroller-web-v$npm_package_version.zip * && cd .."
   },
   "keywords": [],
   "author": "",
