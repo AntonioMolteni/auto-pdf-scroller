@@ -37,6 +37,7 @@ pickButton.onclick = async () => {
     pdfFiles = selected;
     populateFileList(pdfFiles);
     if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
+    setActiveListItem(pdfFiles[0]);
     return;
   }
 
@@ -51,6 +52,7 @@ pickButton.onclick = async () => {
     populateFileList(pdfFiles);
 
     if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
+    setActiveListItem(pdfFiles[0]);
   };
 };
 
@@ -396,6 +398,24 @@ function onUserInteraction() {
     }
   }, autoResumeMs);
 }
+
+const toggleButton = document.getElementById("toggleFileList");
+const sidebar = document.getElementById("sidebar");
+
+toggleButton.addEventListener("click", () => {
+  const isHidden = sidebar.classList.toggle("hidden");
+
+  toggleButton.innerHTML = isHidden
+    ? '<i class="fa fa-bars"></i>'
+    : '<i class="fa fa-times"></i>';
+});
+
+window.addEventListener("resize", () => {
+  if (window.innerWidth >= 768) {
+    sidebar.classList.remove("hidden");
+    toggleButton.innerHTML = '<i class="fa fa-bars"></i>';
+  }
+});
 
 // Listen for typical manual-scroll interactions on the viewer
 viewer.addEventListener("wheel", onUserInteraction, { passive: true });
