@@ -85,10 +85,29 @@ npm start
 # Build distribution packages
 npx electron-builder
 
+
+
 # Output files will be in the dist/ directory
+
 ```
 
 ## Technical Details
+
+### Web Development & Build Scripts
+
+You can run and build the web version using Vite:
+
+```bash
+# Start the web development server
+npm run web
+
+# Build the web app for production
+npm run build:web
+```
+
+The development server will be available at `http://localhost:5173` (or the port shown in your terminal).
+
+The production build will be output to the `build/` directory.
 
 ### Stack
 
