@@ -410,6 +410,13 @@ toggleButton.addEventListener("click", () => {
     : '<i class="fa fa-times"></i>';
 });
 
+window.addEventListener("resize", () => {
+  if (window.innerWidth >= 768) {
+    sidebar.classList.remove("hidden");
+    toggleButton.innerHTML = '<i class="fa fa-bars"></i>';
+  }
+});
+
 // Listen for typical manual-scroll interactions on the viewer
 viewer.addEventListener("wheel", onUserInteraction, { passive: true });
 viewer.addEventListener("touchstart", onUserInteraction, { passive: true });
