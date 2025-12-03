@@ -3,10 +3,10 @@
   "version": "1.0.2",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "electron": "electron .",
+    "build:electron": "electron-builder",
     "web": "vite --host",
-    "build:web": "vite build"
+    "build:web": "vite build --outDir=dist-web"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,9 @@
   "build": {
     "productName": "Auto PDF Scroller",
     "appId": "com.playmixel.autopdfscroller",
+    "directories": {
+      "output": "dist-electron"
+    },
     "mac": {
       "target": "dmg"
     },
