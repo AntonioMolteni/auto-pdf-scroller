@@ -400,12 +400,11 @@ function onUserInteraction() {
 }
 
 const toggleButton = document.getElementById("toggleFileList");
-const fileList = document.getElementById("fileList");
+const sidebar = document.getElementById("sidebar");
 
 toggleButton.addEventListener("click", () => {
-  const isHidden = fileList.classList.toggle("hidden");
+  const isHidden = sidebar.classList.toggle("hidden");
 
-  // Optional: toggle hamburger icon to "X" when open
   toggleButton.innerHTML = isHidden
     ? '<i class="fa fa-bars"></i>'
     : '<i class="fa fa-times"></i>';
