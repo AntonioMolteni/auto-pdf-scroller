@@ -1,3 +1,8 @@
+// Helper function to detect Electron environment
+function isElectron() {
+  return typeof window !== "undefined" && window.api; // window.api exists only in Electron via preload.js
+}
+
 let pdfFiles = [];
 let pdfDoc = null;
 let scrolling = false;
@@ -423,16 +428,14 @@ viewer.addEventListener("touchstart", onUserInteraction, { passive: true });
 viewer.addEventListener("pointerdown", onUserInteraction, { passive: true });
 viewer.addEventListener("keydown", onUserInteraction, { passive: true });
 
-// Load last folder on startup
-window.api.loadLastFolder().then((files) => {
-  if (!files || files.length === 0) return;
+// Load last folder on startup (Electron only)
+if (isElectron()) {
+  window.api.loadLastFolder().then((files) => {
+    if (!files || files.length === 0) return;
 
-  pdfFiles = files;
-  populateFileList(pdfFiles);
+    pdfFiles = files;
+    populateFileList(pdfFiles);
 
-  if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
-});
-
-function isElectron() {
-  return !!window.api; // window.api exists only in Electron via preload.js
+    if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
+  });
 }
