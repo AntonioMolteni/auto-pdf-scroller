@@ -491,11 +491,6 @@ function onUserInteraction() {
     pausedByUser = true;
     updateStatus("Paused — manual scroll");
     updatePlayButton(false);
-
-    // Show sidebar on mobile when manually paused
-    if (window.innerWidth < 768) {
-      sidebar.classList.remove("hidden");
-    }
   }
 
   // Reset inactivity timer for auto-resume
