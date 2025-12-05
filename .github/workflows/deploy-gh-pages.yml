@@ -1,0 +1,111 @@
+name: Release and Deploy
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-web:
+    name: Build Web Version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web version
+        run: npm run build:web
+
+      - name: Upload web files for GitHub Pages
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-pages
+          path: dist-web/
+          retention-days: 1
+
+      - name: Upload web archive to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist-web/auto-pdf-scroller-web-v*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-electron:
+    name: Build Electron Apps
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Electron app
+        run: npm run build:electron
+
+      - name: Upload Electron artifacts to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist-electron/*.dmg
+            dist-electron/*.exe
+            dist-electron/*.AppImage
+            dist-electron/*.deb
+            dist-electron/*.rpm
+            dist-electron/*.zip
+            dist-electron/*.blockmap
+            dist-electron/*.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-pages:
+    name: Deploy to GitHub Pages
+    needs: build-web
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download web build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: web-pages
+          path: dist-web
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "dist-web"
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

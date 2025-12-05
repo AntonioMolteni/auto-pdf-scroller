@@ -10,7 +10,10 @@ A lightweight application that automatically scrolls through PDF documents at co
 
 Get the latest release from the [Releases Page](https://github.com/AntonioMolteni/auto-pdf-scroller/releases).
 
+**Try it online**: [Web Version](https://antoniomolteni.github.io/auto-pdf-scroller/)
+
 **macOS Security Note:** If you see _"Auto PDF Scroller is damaged"_, run:
+
 ```bash
 xattr -c "/Applications/Auto PDF Scroller.app"
 ```
@@ -19,6 +22,7 @@ xattr -c "/Applications/Auto PDF Scroller.app"
 
 - **Automatic Scrolling**: Smooth autoscroll at adjustable speeds (0.5x - 8x)
 - **Multi-File Support**: Load entire folders and navigate between PDFs
+- **Browser Caching**: Web version remembers your PDFs across page refreshes
 - **Manual Pause**: Auto-pauses when you scroll manually, resumes after 3 seconds
 - **Keyboard Shortcuts**: `Space` to play/pause, Arrow keys to adjust speed
 - **Persistent Settings**: Remembers your last folder

@@ -7,7 +7,10 @@
     "build:electron": "electron-builder",
     "web": "vite --host",
     "build:web": "vite build && npm run zip:web",
-    "zip:web": "cd dist-web && zip -r auto-pdf-scroller-web-v$npm_package_version.zip * && cd .."
+    "zip:web": "cd dist-web && zip -r auto-pdf-scroller-web-v$npm_package_version.zip * && cd ..",
+    "release:patch": "npm version patch && git push --follow-tags",
+    "release:minor": "npm version minor && git push --follow-tags",
+    "release:major": "npm version major && git push --follow-tags"
   },
   "keywords": [],
   "author": "",
