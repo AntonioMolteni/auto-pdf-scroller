@@ -3,6 +3,98 @@ function isElectron() {
   return typeof window !== "undefined" && window.api; // window.api exists only in Electron via preload.js
 }
 
+// IndexedDB functions for caching PDFs in web browser
+const DB_NAME = "PDFScrollerDB";
+const DB_VERSION = 1;
+const STORE_NAME = "pdfFiles";
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: "name" });
+      }
+    };
+  });
+}
+
+async function savePDFsToCache(files) {
+  if (isElectron()) return; // Only cache in web mode
+
+  try {
+    // Convert all files to ArrayBuffers BEFORE opening transaction
+    const fileData = [];
+    for (const file of files) {
+      const arrayBuffer = await file.arrayBuffer();
+      fileData.push({
+        name: file.name,
+        data: arrayBuffer,
+        type: file.type,
+        size: file.size,
+      });
+    }
+
+    // Now open transaction and save all data
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+
+    // Clear existing files
+    store.clear();
+
+    // Save each file (synchronously now since data is ready)
+    for (const data of fileData) {
+      store.put(data);
+    }
+
+    // Wait for transaction to complete
+    await new Promise((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+
+    console.log(`Cached ${files.length} PDF files`);
+  } catch (error) {
+    console.error("Error caching PDFs:", error);
+  }
+}
+
+async function loadPDFsFromCache() {
+  if (isElectron()) return null; // Only load cache in web mode
+
+  try {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, "readonly");
+    const store = tx.objectStore(STORE_NAME);
+
+    // Wrap getAll in a Promise
+    const allFiles = await new Promise((resolve, reject) => {
+      const request = store.getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+
+    if (!allFiles || allFiles.length === 0) return null;
+
+    // Convert back to File objects
+    const files = allFiles.map(
+      (item) => new File([item.data], item.name, { type: item.type })
+    );
+
+    console.log(`Loaded ${files.length} PDF files from cache`);
+    return files;
+  } catch (error) {
+    console.error("Error loading cached PDFs:", error);
+    return null;
+  }
+}
+
 let pdfFiles = [];
 let pdfDoc = null;
 let scrolling = false;
@@ -51,9 +143,13 @@ pickButton.onclick = async () => {
   input.value = null; // reset previous selection
   input.click();
 
-  input.onchange = () => {
+  input.onchange = async () => {
     if (!input.files) return;
     pdfFiles = Array.from(input.files);
+
+    // Cache the files in IndexedDB
+    await savePDFsToCache(pdfFiles);
+
     populateFileList(pdfFiles);
 
     if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
@@ -167,7 +263,7 @@ async function openPDF(file) {
   }
 
   viewer.scrollTop = 0;
-  setActiveListItem(path);
+  setActiveListItem(file);
 
   // Force layout reflow to ensure dimensions are calculated
   void viewer.offsetHeight;
@@ -453,6 +549,16 @@ if (isElectron()) {
     if (!files || files.length === 0) return;
 
     pdfFiles = files;
+    populateFileList(pdfFiles);
+
+    if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
+  });
+} else {
+  // Web mode: load cached PDFs on startup
+  loadPDFsFromCache().then((cachedFiles) => {
+    if (!cachedFiles || cachedFiles.length === 0) return;
+
+    pdfFiles = cachedFiles;
     populateFileList(pdfFiles);
 
     if (pdfFiles.length > 0) openPDF(pdfFiles[0]);
