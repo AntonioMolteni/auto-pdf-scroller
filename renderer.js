@@ -304,6 +304,12 @@ function startScrolling() {
     scrollDebugLogged = false; // Reset debug flag
     updateStatus("Playing");
     updatePlayButton(true);
+
+    // Hide sidebar on mobile when playing
+    if (window.innerWidth < 768) {
+      sidebar.classList.add("hidden");
+    }
+
     console.log("Starting autoscroll...");
     requestAnimationFrame(smoothScrollLoop);
   }
